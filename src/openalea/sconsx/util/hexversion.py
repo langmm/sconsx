@@ -89,12 +89,12 @@ class HexVersion (object):
     @staticmethod
     def from_py_variable(variable, fname):
         namespace = {}
-        execfile(fname, namespace, namespace)
+        exec(compile(open(fname, "rb").read(), fname, 'exec'), namespace, namespace)
         return HexVersion(namespace[variable])
 
     @staticmethod
     def from_string(strvalue):
-        numbers = map(int,strvalue.split('.'))
+        numbers = list(map(int,strvalue.split('.')))
         if len(numbers) == 3:
             major,minor,revision = numbers
         elif len(numbers) == 2:

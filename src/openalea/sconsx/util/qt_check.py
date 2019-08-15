@@ -34,7 +34,7 @@ def detect_installed_qt_version(default = 4):
             variable = 'QT_VERSION'
             QT_VERSION = read_variable(variable, qversionconfig)
         if QT_VERSION is None:
-            print ('Autodetect qt error in',repr(library_inc))
+            print(('Autodetect qt error in',repr(library_inc)))
             QT_VERSION = default
         else:
             if type(QT_VERSION) != int : print(QT_VERSION)
