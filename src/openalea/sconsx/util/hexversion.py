@@ -2,7 +2,7 @@
 
 def read_variable(varname, fname):
     import re
-    stream = file(fname, 'r')
+    stream = open(fname, 'r')
     text = stream.read()
     pattern = '#define\s+?'+varname+'\s+?(.+?)\s*?$'
     res = re.findall(pattern, text, re.M)

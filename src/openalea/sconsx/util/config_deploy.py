@@ -31,7 +31,7 @@ def get_var_from_cpp_config(fname = os.path.join('src', 'cpp', 'plantgl', 'userc
     result = {}
     pattern = '#define'
     if os.path.exists(fname):
-        stream = file(fname,'r')
+        stream = open(fname,'r')
         for line in stream.readlines():
             if line.startswith(pattern):
                 var,value = list(map(str.strip,line[len(pattern)+1:].split(' ',1)))
@@ -70,7 +70,7 @@ condapattern = '{{% set version = "{}" %}}'
 condaregpattern = condapattern.format("(?P<version>[0-9]+.[0-9]+.[0-9]+)").replace(' ','[ \t]+')
 
 def get_version_from_conda(fname):
-    result = re.search(condaregpattern, file(fname,'r').read())
+    result = re.search(condaregpattern, open(fname,'r').read())
     if not result is None:
         version_str = result.group("version")
         return HexVersion.from_string(version_str)
@@ -78,8 +78,8 @@ def get_version_from_conda(fname):
 
 def generate_conda_version(version, fname):
     print('Update conda config in',repr(fname))
-    result = re.sub(condaregpattern, condapattern.format(version.to_string()),file(fname,'r').read(),1)
-    file(fname,'w').write(result)
+    result = re.sub(condaregpattern, condapattern.format(version.to_string()),open(fname,'r').read(),1)
+    open(fname,'w').write(result)
 
 def generate_config(project,
                     config, 
