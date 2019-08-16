@@ -31,8 +31,6 @@ try:
     from SCons.Script import VariantDir
 except ImportError:
     from SCons.Script import BuildDir as VariantDir
-from SCons.Options import  Options 
-from SCons.Options import  PathOption, BoolOption, EnumOption
 from SCons.Variables import PathVariable
 from SCons.Variables import BoolVariable
 from SCons.Variables import EnumVariable
@@ -293,7 +291,7 @@ class Config(object):
         """
         Add each tool options
         """
-        opts = Options(*args, **kwds)
+        opts = Variables(*args, **kwds)
         self.UpdateOptions(opts)
 
         return opts
