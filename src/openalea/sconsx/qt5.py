@@ -57,7 +57,7 @@ class QtdirNotFound(ToolQtWarning):
 
 SCons.Warnings.enableWarningClass(ToolQtWarning)
 
-qrcinclude_re = re.compile(r'<file>([^<]*)</file>', re.M)
+qrcinclude_re = re.compile(b'<file>([^<]*)</file>', re.M)
 
 
 header_extensions = [".h", ".hxx", ".hpp", ".hh"]
@@ -119,9 +119,9 @@ class _Automoc:
 
         # some regular expressions:
         # Q_OBJECT detection
-        q_object_search = re.compile(r'[^A-Za-z0-9]Q_OBJECT[^A-Za-z0-9]')
+        q_object_search = re.compile(b'[^A-Za-z0-9]Q_OBJECT[^A-Za-z0-9]')
         # cxx and c comment 'eater'
-        #comment = re.compile(r'(//.*)|(/\*(([^*])|(\*[^/]))*\*/)')
+        #comment = re.compile(b'(//.*)|(/\*(([^*])|(\*[^/]))*\*/)')
         # CW: something must be wrong with the regexp. See also bug #998222
         #     CURRENTLY THERE IS NO TEST CASE FOR THAT
 
@@ -166,7 +166,7 @@ class _Automoc:
                     if debug:
                         print(("scons: qt: Scanning '%s' (header of '%s')" % \
                             (str(h), str(cpp))))
-                    #h_contents = comment.sub('', h.get_contents())
+                    #h_contents = comment.sub(b'', h.get_contents())
                     h_contents = h.get_contents()
                     break
             if not h and debug:
