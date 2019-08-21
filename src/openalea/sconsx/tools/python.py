@@ -82,7 +82,9 @@ class Python:
       elif isinstance(platform, Darwin):
           # hack to not use python system
           version = "%d.%d" % (sys.version_info.major,sys.version_info.minor)
-          pylib = 'python' + version
+          pylib_old = 'python' + version
+          pylib = os.path.basename(get_python_inc(plat_specific=1))
+          assert(pylib.startswith(pylib_old))
           pylib = os.path.join(env['python_libpath'],'lib'+pylib+'.dylib')
           env.AppendUnique(LINKFLAGS=[pylib])
       else:
