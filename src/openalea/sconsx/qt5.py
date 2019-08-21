@@ -251,10 +251,16 @@ def generate(env):
     env['QTDIR']  = _detect(env)
     # TODO: 'Replace' should be 'SetDefault'
 #    env.SetDefault(
+    qtinclude = os.path.join('$QTDIR', 'include')
+    subdirqt = os.path.join(env['QTDIR'], 'include','qt')
+    subdirqtQtCore = os.path.join(subdirqt,'QtCore')
+    
+    if os.path.exists(subdirqt) and os.path.exists(subdirqtQtCore) and os.path.isdir(subdirqtQtCore):
+        qtinclude = subdirqt
     env.Replace(
         QTDIR  = _detect(env),
         QT5_BINPATH = os.path.join('$QTDIR', 'bin'),
-        QT5_CPPPATH = os.path.join('$QTDIR', 'include'),
+        QT5_CPPPATH = qtinclude,
         QT5_LIBPATH = os.path.join('$QTDIR', 'lib'),
         # TODO: This is not reliable to QTDIR value changes but needed in order to support '-qt4' variants
         QT5_MOC = locateQt5Command(env,'moc', env['QTDIR']),
@@ -506,6 +512,7 @@ def enable_modules(self, modules, debug=False, suffix = '') :
 
         # TODO: Test debug version on Mac
         self.AppendUnique(LIBPATH=["$QT5_LIBPATH"])
+        self.AppendUnique(CXXFLAGS="-std=c++11")
         if QT_FRAMEWORK:
             self.AppendUnique(CXXFLAGS="-F$QTDIR/lib")
             self.AppendUnique(LINKFLAGS="-F$QTDIR/lib")
