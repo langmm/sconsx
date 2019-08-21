@@ -32,10 +32,9 @@ regc = re.compile(reg)
 #sharedlib_ext = {'linux2' : 'so', 'win32' : 'dll', 'cygwin' : 'dll', 'darwin' : 'dylib', 
 #                 'os2' : 'dll', 'os2emx' : 'dll', 'riscos' : 'so'}
 
-def get_default_boost_libs_suffix(path):
+def get_default_boost_libs_suffix(path, libname='boost_python'):
     import glob
     boost_libs_suffix=None
-    libname = 'boost_python'
     bp = glob.glob(os.path.join(path,'*'+libname+'*.*'))
     if not bp is None and len(bp) > 0:
         bp = os.path.basename(bp[0])
@@ -74,7 +73,7 @@ class BoostBase:
         if CONDA_ENV:
             self._default['include'] = join(CONDA_LIBRARY_PREFIX, 'include')
             self._default['libpath'] = join(CONDA_LIBRARY_PREFIX, 'lib')
-            detectedsuffix = get_default_boost_libs_suffix(self._default['libpath']) 
+            detectedsuffix = get_default_boost_libs_suffix(self._default['libpath'], libname=self.name) 
             if detectedsuffix:
                 self._default['libs_suffix'] = detectedsuffix 
             self.__usingEgg = False
@@ -99,7 +98,7 @@ class BoostBase:
                     defdir = detect_posix_project_installpath('include/boost')
                     self._default['include'] = join(defdir,'include')
                     self._default['libpath']     = join(defdir,'lib')
-                    detectedsuffix = get_default_boost_libs_suffix(self._default['libpath']) 
+                    detectedsuffix = get_default_boost_libs_suffix(self._default['libpath'], libname=self.name) 
                     if detectedsuffix:
                         self._default['libs_suffix'] = detectedsuffix
 
@@ -131,7 +130,7 @@ class BoostBase:
               self.name + ' defines',
               self._default['defines']),
 
-            ('boost_libs_suffix',
+            (self.name + '_libs_suffix',
               self.name + ' library suffix name like -vc80-mt or -gcc',
               self._default['libs_suffix']),
 
@@ -181,9 +180,9 @@ class BoostBase:
                 if maj >= 1 and min >= 43 :
                     boost_name= self.name +".dll" #on Windows mingw/cygwin we now only support boost compilations with --layout=system
                 else:
-                    boost_name= self.name + env['boost_libs_suffix']
+                    boost_name= self.name + env[self.name + '_libs_suffix']
             else:
-                boost_name= self.name + env['boost_libs_suffix']
+                boost_name= self.name + env[self.name + '_libs_suffix']
             env.AppendUnique(LIBS=[boost_name])
 
 

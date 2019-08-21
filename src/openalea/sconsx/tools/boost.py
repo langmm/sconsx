@@ -41,7 +41,8 @@ ModuleFlags = {
 def EnableBoostModules(env, libnames):
 
     def enablemodule(libname):
-        libfullname= 'boost_' + libname + env['boost_libs_suffix']
+        libfullname= 'boost_' + libname
+        libfullname+= env[libfullname + '_libs_suffix']
         env.AppendUnique(LIBS=[libfullname])
         if libname in ModuleDefines:
             env.Append(CPPDEFINES=ModuleDefines[libname])
