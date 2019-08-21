@@ -505,8 +505,8 @@ def enable_modules(self, modules, debug=False, suffix = '') :
         return
 
     if sys.platform == "darwin" :
-        if not suffix:
-            suffix = '.5'
+        # if not suffix:
+        #     suffix = '.5'
 
         QT_FRAMEWORK = self['QT5_FRAMEWORK']
 
@@ -519,18 +519,18 @@ def enable_modules(self, modules, debug=False, suffix = '') :
             self.AppendUnique(LINKFLAGS="-F$QTDIR/Library/Frameworks") # To check by @CP
             self.AppendUnique(LINKFLAGS="-L$QTDIR/lib") #TODO clean!
         if debug : debugSuffix = 'd'
-        if suffix : debugSuffix = '.5'
+        if suffix : debugSuffix = suffix
 
         self.AppendUnique(CPPPATH=["$QT5_CPPPATH"])
         for module in modules :
             self.AppendUnique(CPPPATH=[os.path.join("$QT5_CPPPATH",module)])
 
             if not QT_FRAMEWORK:
-                self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
+                self.AppendUnique(LIBS=[module.replace('Qt','Qt5')+debugSuffix]) # TODO: Add the debug suffix
                 #self.AppendUnique(LIBPATH=[os.path.join("$QTDIR","lib")])
             else:
                 if module in pclessModules :
-                    self.AppendUnique(LIBS=[module+debugSuffix]) # TODO: Add the debug suffix
+                    self.AppendUnique(LIBS=[module.replace('Qt','Qt5')+debugSuffix]) # TODO: Add the debug suffix
                     self.AppendUnique(LIBPATH=[os.path.join("$QTDIR","lib")])
                 else :
                     self.Append(LINKFLAGS=['-framework', module])
